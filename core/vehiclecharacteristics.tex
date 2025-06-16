@@ -1,0 +1,121 @@
+% !TEX root = ../main.tex
+
+\chapter{Vehicle Characteristics}
+
+\section{Overview}
+Vehicles have Characteristics that define how powerful they are in
+a similar way that Non-Vehicle Models do. However, as Vehicles do
+not fight in the same way their Characteristics are different.
+
+Unlike with Non-Vehicle Models the ranges can exceed 0-10.
+Models with a Zero Level Characteristic may not test this
+Characteristic
+
+
+\section{Vehicle Profile}
+The Vehicle Characteristics Profile looks like this:
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[3,l] X[1,c] X[1,c] X[1,c] X[1,c] },
+	% columns = {3em, c},
+	% column{1} = {10em, l}
+	}
+& & \SetCell[c=3]{c} {\bfseries \reflectbox{\textlnot} Armour \textlnot} \\
+ & {\bfseries BS}  & {\bfseries Front}  & {\bfseries Side} & {\bfseries Rear} \\
+Predator Annihilator & 4 & 13 & 11 & 10\\
+\end{tblr}
+
+\section{Walker Profile}
+The Walker Characteristics Profile looks like this:
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[3.5,l] X[1,c] X[1,c] X[1,c] X[1.5,c] X[1.5,c] X[1.5,c] X[1,c] X[1,c]}
+	% colspec = {c c c c c c c},
+	% columns = {1.75em, c},
+	% column{1} = {10em, l},
+	% column{4} = {3em, c},
+	% column{5} = {3em, c},
+	% column{6} = {3em, c}
+	}
+& & &  & \SetCell[c=3]{c} {\bfseries \reflectbox{\textlnot} Armour \textlnot} \\
+ & {\bfseries WS}  & {\bfseries BS} & {\bfseries S} & {\bfseries Front} & {\bfseries Side} & {\bfseries Rear} & {\bfseries I} & {\bfseries A} \\
+Dreadnaught & 4 & 4 & 7 & 12 & 12 & 10 & 4 & 2 \\
+\end{tblr}
+
+
+\section{Vehicle Characteristics \\ In Detail}
+Here's a quick summary to what it stands for:
+
+\subsection{Type}
+Special rules for different Vehicle types can be found on page \pageref{sec:vehicletypes}.
+
+\subsection{Armour}
+Separate Armor values are given for the Front (F), Sides (S),
+and Rear (R) of each Vehicle Model. The values range from 10 -
+14 and are used according to the front, side, rear of the Vehicle
+Model being attacked.
+
+When hit by a shot or blow, roll 1d6 + Strength (of the blow or
+shot). Compare this result against the Armor value of the facing
+struck then determine the result according to this chart:
+
+
+\begin{center}
+\begin{tblr}{
+	colspec = {c c},
+	% columns = {3em, c},
+	}
+Score vs Armour & Type of Hit\\\hline
+greater than & penetrating hit\\
+equal & glancing hit\\
+less than & no effect
+\end{tblr}
+\end{center}
+
+For each Glancing Hit or Penetrating Hit roll on the
+following table to determine what happens to the Vehicle.
+
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[1,c] X[6,c] X[6,c] X[6,c]},
+	rows = {m},
+	rowsep = 5pt
+	% columns = {10em,c},
+	% column{1} = {1.75em,c}
+}
+d6 & Glancing Hit & Penetrating Hit & Ordiance P. Hit\\\hline
+1 & Shaken & Stunned & Stunned\\
+2 & Shaken & {Stunned + \\Gun Wrecked} & {Stunned + \\Gun Wrecked}\\
+3 & Stunned & {Stunned + \\Immobilized} & {Stunned + \\Immobilized}\\
+4 & Gun Wrecked & Destroyed & Destroyed\\
+5 & Immobilized & Destroyed & Explodes\\
+6 & Destroyed & Explodes & Annihilated\\
+\end{tblr}
+
+\subsection{(WS), (BS), (S), (I), (A)}
+Performs the same function as with Non-Vehicle Models. See page
+\pageref{sec:characteristics} for more details on each specific Characteristic.
+
+\section{Unlisted}
+Every Vehicle models have three more values that won't appear on
+a Vehicle Characteristics Profile:
+
+\subsection{Transport Capacity}
+Indicates how many human-sized infantry can be carried by the
+Vehicle Model.
+
+\subsection{Access Points}
+Indicates where non-vehicle models may board a Transport-type
+Vehicle model.
+
+\subsection{Fire Points}
+If the Vehicle Model is not Open-Topped, Fire Points indicates how
+many passengers can fire their weapons while inside the Vehicle
+model when being transported.
+
