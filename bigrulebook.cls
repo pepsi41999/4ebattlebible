@@ -230,13 +230,14 @@
 \setbeforesubsecskip{-0.667\onelineskip plus -0.25\onelineskip minus -0.25\onelineskip}%
 \setaftersubsecskip{0.15\onelineskip plus 0.05\onelineskip}%
 
-% \renewcommand{\thesubsection}{\textnormal{\roman{subsection}}.}
+
+
 
 %Sometimes Its desirable to count subsections to make a psudo list out of them
-\newcounter{mysubsectioncounter}%makes new counter
-\newcommand{\countsubsections}{%redefines the subsection heading to include this counter
-    \setcounter{mysubsectioncounter}{0}
-    \setsubsecheadstyle{\Large\brbsubsectionfont\bfseries\raggedright \addtocounter{mysubsectioncounter}{1} \themysubsectioncounter)~}
+\renewcommand{\thesubsection}{\arabic{subsection}}%redefine thesubsection to print only the subsection number (needed so refs work)
+\newcommand{\countsubsections}{%redefines the subsection heading to print the subsection, and resets the counter
+    \setcounter{subsection}{0}
+    \setsubsecheadstyle{\Large\brbsubsectionfont\bfseries\raggedright \thesubsection)~}
 }
 
 \newcommand{\stopcountsubsections}{%restores the default subsection header
