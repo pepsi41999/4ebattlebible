@@ -78,7 +78,7 @@ three steps:
 \countsubsections
 
 \subsection{Pick a Unit Locked in Close Combat}
-
+\label{step:pickunitforchage}
 Models in base-to-base contact with an enemy model, or
 within 2” of a friendly model that is in base-to-base contact with
 an enemy model ,are said to be Engaged. Only these
@@ -257,19 +257,20 @@ Determining Attack Order step.
 Total up the number of Wounds inflicted by each side. The side
 that inflicted the most Wounds is the winner. Note that this
 does not include excess Wounds as those as discarded. If it is
-a draw, nothing happens, proceed to Step 9. If one side lost all
+a draw, nothing happens, proceed to Step \ref{step:pileinmoves}. If one side lost all
 of its models in the assault, it is counted as a Massacre,
-proceed to Step 8.
+proceed to \ref{step:consolidation}.
 
 \subsection{Loser Checks Morale}
 The loser of the Assault must make a Morale Test (see page
-XX). If passed, proceed to Step 9. Otherwise go to Step 7.
+\pageref{sec:morale}). If passed, proceed to Step \ref{step:pileinmoves}. Otherwise go to Step \ref{step:fallingbacksweepingadvances}.
 
 \subsection{Falling Back \& Sweeping Advances}
+\label{step:fallingbacksweepingadvances}
 Both the loser and winner roll 1D6+Initiative. If the loser's
-result is greater than the winner’s they break off from the Close
+result is greater than the winner's they break off from the Close
 Combat successfully and make a Fall Back move. Otherwise
-the winner makes a Sweeping Advance, causing the loser’s
+the winner makes a Sweeping Advance, causing the loser's
 Unit to be removed immediately from the board as they are
 immediately Massacred.
 
@@ -280,7 +281,7 @@ winner, the winning Unit may not use a Sweeping Advance but
 may still make a Consolidation move.
 
 \subsection{Consolidation}
-
+\label{step:consolidation}
 After winning Close Combat, the victorious Unit may move up
 to 3” in any direction, or engage new enemy Unit(s) if any are
 within range. This movement may not be used to embark on a
@@ -295,7 +296,7 @@ tests, nor is it slowed by Difficult Terrain.
 
 
 \subsection{Pile-in Moves}
-\label{Pile-in-Moves}
+\label{step:pileinmoves}
 At this step of the Assault Phase, models in Units that were
 Locked but not themselves Engaged must move up to 6” in an
 attempt to contact the same enemy their other members were
@@ -307,7 +308,7 @@ the Pile-in does not result in Engaged models both sides then
 Consolidate, starting with the player whose turn it is.
 
 \subsection{Repeat}
-Return to Step 1 and resolve Close Combat for all Units that
+Return to Step \ref{step:pickunitforchage} and resolve Close Combat for all Units that
 have not yet done so.
 
 \stopcountsubsections
