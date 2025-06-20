@@ -1,0 +1,314 @@
+% !TEX root = ../main.tex
+
+\chapter{The Assault Phase}
+
+\section{Overview}
+
+The Assault Phase is comprised of two parts, Charges and
+Close Combat. The summary of both is as follows.
+
+\section{Charging}
+The Charge process can be broken down into four steps:
+
+\countsubsections
+
+\subsection{Choose Valid Unit}
+The Unit must have at least one model within assaulting range
+of a target that it can reach while avoiding obstructions such as
+Impassable Terrain and/or other enemy Units they don't wish
+to charge. The Unit can't have fired twice with Pistol(s), shot
+with Rapid Fire and/or Heavy Weapon(s) nor Falling Back or
+being Pinned.
+
+\subsection{Declare a Charge}
+
+If the Unit fired in the Shooting Phase, it must target the Unit it
+shot at. The charging Unit may targets multiple enemy Units
+but may only do so if it could reach them all without losing Unit
+Coherency. One of the enemy Units must be designated as
+the primary target, and the charging Unit must move to engage
+that one first and then the others. If it selects multiple targets
+and also shot in the Shooting Phase this turn, it must
+designate that enemy Unit as the primary target.
+
+\subsection{Make an Assault}
+Start the charge by moving the model that is closest to the
+target enemy Unit up to its Assault move distance. It must end
+in base-to-base contact with an enemy model, otherwise the
+charge fails. If the model succeed, then move each other
+model in the charging Unit one by one in the same way.
+
+Assault move is 6” by default, unless otherwise specified. A
+Unit with mixed Assault moves will move at the lowest value of
+all models in the unit. Rules for Difficult or Dangerous Terrain
+apply as usual and can cause a charge to fail.
+
+Any charging model must attempt to move into base-to-base
+contact with an enemy model that has no other charging
+models in base-to-base contact. If the model cannot do that,
+then it must end within 2” of another friendly model that is in
+base-to-base contact. If the model can't do that either, it must
+attempt to maintain Unit Coherency otherwise the charge fails.
+
+Charging models cannot move through friendly or enemy
+models nor move within 1” of enemy models from Units they
+are not charging, nor pass through gaps narrower than their
+base diameter.
+
+If a Unit should fails its charge it stays in place and doesn't
+move. Otherwise it is now Locked in Close Combat.
+
+\subsection{Repeat the Above or Conclude}
+You have to stop when you have no more valid Unit to charge
+with or you can also decide to stop at any time by yourself.
+Once you're done, resolve the Close Combat process by
+following the broken down instructions found on the right.
+
+\stopcountsubsections
+
+\section{Close Combat}
+
+Units that are Locked in Close Combat cannot shoot or be shot
+at. Blast markers that scatter and templates can land on and
+affect Locked units. Casualties caused by errant blast markers
+or templates do not cause Pinning or Ld Test though.
+The Close Combat process itself can be broken down into
+three steps:
+
+\countsubsections
+
+\subsection{Pick a Unit Locked in Close Combat}
+
+Models in base-to-base contact with an enemy model, or
+within 2” of a friendly model that is in base-to-base contact with
+an enemy model ,are said to be Engaged. Only these
+Engaged models (from both armies) can fight in Close Combat
+and become casualties as a result of it.
+
+
+\subsection{Determining Attack order}
+
+All Engaged models from both armies fight in Close Combat.
+Begin with the Engaged model(s) with the highest Initiative (I)
+and work down in descending order through all other models
+Engaged in the Close Combat. Models that have not attacked
+yet but are killed by higher Initiative models cannot attack.
+Models that are Charged while they are within Cover are
+treated as Initiative 10, as are attackers using Frag or Plasma
+grenades during their Charge. Cover only affects the first
+round of combat. After the initial round of combat, models fight
+at Initiative Order.
+
+\subsection{Check for extra Attacks}
+
+Engaged models that charged this Phase get a +1A that only
+lasts for the first round of combat. This very bonus is canceled
+if the charged Unit(s) is equipped with Photon Grenades.
+Engaged models with 2 or more single handed weapons
+(typically a pistol and close combat weapon, or 2 close combat
+weapons) get a +1A that is not limited by round, Phase or Turn.
+
+\subsection{Roll to Hit}
+
+When rolling To Hit, compare the attacker's WS to the
+defender's WS on the Chart below to determine the target
+number to be rolled for a successful Hit. When models attack,
+calculate a model's To Hit roll based on its individual Weapon
+Skill.
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[0.6,c] X[1,c] |  X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c]},
+	rows = {m},
+	rowsep = 3pt
+	% columns = {10em,c},
+	% column{1} = {1.75em,c}
+}
+\SetCell[c=12]{c} Defender's Weapon Skill\\
+ &    &  1 & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 \\\hline
+\SetCell[r=10]{m} \rotatebox[origin=c]{90}{Attacker's Weapon Skill}
+ &  1 & 4+ & 4+ & 5+ & 5+ & 5+ & 5+ & 5+ & 5+ & 5+ & 5+  \\
+ &  2 & 3+ & 4+ & 4+ & 4+ & 5+ & 5+ & 5+ & 5+ & 5+ & 5+  \\
+ &  3 & 3+ & 3+ & 4+ & 4+ & 4+ & 4+ & 5+ & 5+ & 5+ & 5+  \\
+ &  4 & 3+ & 3+ & 3+ & 4+ & 4+ & 4+ & 4+ & 4+ & 5+ & 5+  \\
+ &  5 & 3+ & 3+ & 3+ & 3+ & 4+ & 4+ & 4+ & 4+ & 4+ & 4+  \\
+ &  6 & 3+ & 3+ & 3+ & 3+ & 3+ & 4+ & 4+ & 4+ & 4+ & 4+  \\
+ &  7 & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 4+ & 4+ & 4+ & 4+ \\
+ &  8 & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 4+ & 4+ & 4+ \\
+ &  9 & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 4+ & 4+ \\
+ & 10 & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 3+ & 4+ \\
+\end{tblr}
+
+When determining To Hit rolls, use whatever is the majority of
+WS among engaged models in the enemy Unit. Where there
+is no majority, always use the lower of the two values.
+
+
+
+\subsection{Roll to Wound}
+For all successful Hits, compare the Weapon's Strength
+against the target's Toughness according to the table below.
+Remember to account for any bonuses from equipped
+Weapon Types. The number indicated is the minimum face
+value on a d6 needed for the Hit to cause a Wounding Hit.
+Results of N mean the Hit has no effect.
+
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[0.6,c] X[1,c] |  X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c]},
+	rows = {m},
+	rowsep = 3pt
+	% columns = {10em,c},
+	% column{1} = {1.75em,c}
+}
+\SetCell[c=12]{c} Defender's Toughness\\
+ &    &  1 & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 \\\hline
+\SetCell[r=10]{m} \rotatebox[origin=c]{90}{Attacker's Strength}
+ &  1 & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  & -  & -  \\
+ &  2 & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  & -  \\
+ &  3 & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  \\
+ &  4 & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  \\
+ &  5 & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  \\
+ &  6 & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  \\
+ &  7 & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ \\
+ &  8 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ \\
+ &  9 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ \\
+ & 10 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ \\
+\end{tblr}
+
+When determining To Wound rolls, use whatever is the
+majority of T among engaged models in the enemy unit.
+Where there is no majority, always use the lower of the two
+values.
+
+\subsection{Wound Allocation}
+After determining the number of Wounding Hits, make Armor
+Saves for all Hits. When Allocating Wounding Hits, no single
+model may be said to take all hits (unless it is the only valid
+target). Once all Wounding Hits and Wounds have been dealt,
+if excess damage was dealt it is wasted. If only one Sv is being
+used, once made for all Wounding Hits Wounds may then be
+allocated to any models the targeted unit's player chooses, so
+long as there are no multi-Wound models that have already
+taken a Wound. Wounds must be applied to them first, without
+``spreading around'' the damage to their fellows.
+
+Units with multi-wound models must remove whole multi-
+wound models as casualties where possible. Wounds cannot
+be spread around.
+
+\subsubsection{Who Can Have A Wound Allocated?}
+{\bfseries Shooting:} Only models in range of the weapon causing the
+save, or in line of sight, or eligible to have a wound allocated.
+{\bfseries Torrent of Fire:} When a unit suffers as many (or more)
+wounding hits from the firing of a single enemy unit as it has
+models, the shooting player can nominate one model in the
+target unit that could be a casualty. This model must make a
+save against one of the wounding hits.
+
+The owning player can choose which wounding hit the model
+saves against, and if the model has more than one save, can
+choose which one. Then all other saves are taken as normal.
+{\bfseries Close Combat:} Only Engaged models in close combat are
+eligible to have wounds allocated to them.
+Casualties must be removed in such a way that the unit's
+coherency is maintained.
+
+\subsubsection{If a Unit has Mixed Armor}
+\begin{enumerate}
+\item Count up models of each Sv value (only valid targets).
+\item  Determine the majority Sv, in the case of a tie the worst
+Sv is assumed to be the majority.
+\item  Apply Wounding Hits to the majority Sv first. If there are
+any remaining Wounding Hits, apply to any remaining
+models.
+\item  Incoming hits form “sets” where every model must have
+a Wounding Hit allocated before the next set is allocated.
+\end{enumerate}
+
+Once determined, check if any have to contend with Armor
+Piercing for any or all allocated Wounding Hits. If so, resolve
+those first then roll saving throws.
+
+\subsection{Saving Throws}
+Each model gets only one Saving Throw, chosen from
+whichever options they have available to them. For each failed
+Saving Throw the model takes a Wound.
+
+When Wounds taken = W Characteristic, remove the model.
+Excess wounds are lost. Units of multi-wound models must
+remove whole models where possible. Once all eligible
+Engaged models have fought, then proceed to the next step.
+
+\subsubsection{Instant Death}
+When Weapon S Characteristic is 2x Target's T Characteristic,
+multiple Wound models suffer Instant Death on a failed Saving
+Throw and are immediately killed.
+
+\subsubsection{Cover Saves}
+Cover does not give any benefit when making Saving Throws
+in a Close Combat as it is already accounted for in the
+Determining Attack Order step.
+
+\subsection{Determine Winner of Assault}
+Total up the number of Wounds inflicted by each side. The side
+that inflicted the most Wounds is the winner. Note that this
+does not include excess Wounds as those as discarded. If it is
+a draw, nothing happens, proceed to Step 9. If one side lost all
+of its models in the assault, it is counted as a Massacre,
+proceed to Step 8.
+
+\subsection{Loser Checks Morale}
+The loser of the Assault must make a Morale Test (see page
+XX). If passed, proceed to Step 9. Otherwise go to Step 7.
+
+\subsection{Falling Back \& Sweeping Advances}
+Both the loser and winner roll 1D6+Initiative. If the loser's
+result is greater than the winner’s they break off from the Close
+Combat successfully and make a Fall Back move. Otherwise
+the winner makes a Sweeping Advance, causing the loser’s
+Unit to be removed immediately from the board as they are
+immediately Massacred.
+
+However, if the winning Unit is still Locked in Close Combat
+with another enemy Unit, or if the Unit currently Falling Back
+no longer has any model in base-to-base contact with the
+winner, the winning Unit may not use a Sweeping Advance but
+may still make a Consolidation move.
+
+\subsection{Consolidation}
+
+After winning Close Combat, the victorious Unit may move up
+to 3” in any direction, or engage new enemy Unit(s) if any are
+within range. This movement may not be used to embark on a
+transport Vehicle and the consolidating Unit must maintains
+Unit Coherency regardless of how it moves. A unit which
+consolidates into a new Close Combat does not count as
+Engaged (but is now Locked) until the next Assault Phase.
+
+If the victor caused a Massacre they may move 1D6” instead.
+Consolidation movement does not trigger Dangerous Terrain
+tests, nor is it slowed by Difficult Terrain.
+
+
+\subsection{Pile-in Moves}
+\label{Pile-in-Moves}
+At this step of the Assault Phase, models in Units that were
+Locked but not themselves Engaged must move up to 6” in an
+attempt to contact the same enemy their other members were
+Engaged with. Both players must Pile-in, beginning with the
+player whose turn it is currently.
+This is done the same as moving during a Charge, but does
+not trigger Terrain Tests (like Consolidation). If the results of
+the Pile-in does not result in Engaged models both sides then
+Consolidate, starting with the player whose turn it is.
+
+\subsection{Repeat}
+Return to Step 1 and resolve Close Combat for all Units that
+have not yet done so.
+
+\stopcountsubsections
+

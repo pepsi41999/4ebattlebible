@@ -211,6 +211,7 @@
 
 % Section Formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{4}%add counters to subsections
 
 % store the section name in case you need it
 \def\thesectionname{}
@@ -229,6 +230,18 @@
 \setbeforesubsecskip{-0.667\onelineskip plus -0.25\onelineskip minus -0.25\onelineskip}%
 \setaftersubsecskip{0.15\onelineskip plus 0.05\onelineskip}%
 
+% \renewcommand{\thesubsection}{\textnormal{\roman{subsection}}.}
+
+%Sometimes Its desirable to count subsections to make a psudo list out of them
+\newcounter{mysubsectioncounter}%makes new counter
+\newcommand{\countsubsections}{%redefines the subsection heading to include this counter
+    \setcounter{mysubsectioncounter}{0}
+    \setsubsecheadstyle{\Large\brbsubsectionfont\bfseries\raggedright \addtocounter{mysubsectioncounter}{1} \themysubsectioncounter)~}
+}
+
+\newcommand{\stopcountsubsections}{%restores the default subsection header
+    \setsubsecheadstyle{\Large\brbsubsectionfont\bfseries\raggedright}
+}
 
 %format subsubsection
 \setsubsubsecheadstyle{\itshape\bfseries\raggedright}

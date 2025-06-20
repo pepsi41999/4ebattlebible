@@ -1,0 +1,250 @@
+% !TEX root = ../main.tex
+
+\chapter{The Shooting Phase}
+
+\section{Overview}
+
+During the Shooting Phase any or all of a player's Units may
+fire, but each Unit must complete shooting before moving on
+to the next.
+
+Every model in a Unit may shoot, but Non-vehicle models can
+only fire one weapon each. Vehicle Models may be able to fire
+more than one weapon per model depending on availability of
+targets. Individual models within a Unit can choose not to
+shoot.
+
+The whole Unit has to fire its weaponry at a single opposing
+Unit – you may not split fire between two or more target Units.
+Once the Shooting Phase is complete the player moves on to
+their Assault Phase.
+
+\section{Moving \& Shooting}
+If any part of a unit moved during the preceding Movement
+Phase, the whole unit counts as having moved.
+
+
+\section{Shooting Phase Summary}
+
+The Shooting Phase can be broken down into three steps:
+
+\begin{enumerate}
+	\item Choose a valid Unit to shoot with.
+The Unit must have at least one model with a Ranged
+Weapon, a target within range and line of sight to shoot at and
+neither Falling Back nor being Pinned.
+
+\item Resolve the Shooting Process for said Unit.
+By following the broken down instructions found further down
+on this page and the next one.
+
+\item Repeat the above or conclude.
+You have to stop when you have no more valid Unit to shoot
+with or you can also decide to stop at any time by yourself.
+
+\end{enumerate}
+
+\section{The Shooting Process}
+The Shooting Process follows seven major steps:
+
+\countsubsections
+
+\subsection{Choose a valid Target}
+Select an enemy Unit for your shooting Unit to fire at. Your Unit
+may only fire at the nearest enemy Unit unless
+
+\begin{itemize}
+\item The nearest enemy Unit is Falling Back.
+\item The nearest enemy Unit is Locked in Close Combat.
+\item The Shooting Unit passes at a Ld Test to target a different
+Unit instead. This Ld Test must be taken even if the Unit
+automatically passes these tests or don't need to take them.
+\item The next nearest enemy Unit is Size 3, which may be
+targeted instead without having to take a Ld Test. If there is
+another Size 3 Unit farther away than this one, you must
+pass a Ld Test if you want to target that one instead.
+\end{itemize}
+
+You may not measure range before choosing a target. If you
+are unsure of what target is closest, the unit should take a Ld
+Test, then you can determine what target is closest.
+
+
+\subsection{Line of Sight (LOS) \& Range}
+Check if the enemy Unit is within the listed Range of the Unit's
+weapon(s), if not those attacks miss automatically. Get down
+to eye level of the table and see if you can draw an imaginary
+uninterrupted firing line from your Unit to the targeted Unit. If
+not, the attack fails automatically. If both within range and LOS
+the model is a valid target and you may proceed further.
+Additionally:
+\begin{itemize}
+\item Infantry models from the shooting Unit's army don't block
+LOS.
+\item All Size 3 models block LOS, the exception being
+Skimmers that are not turned into Wrecks or not
+Immobilized.
+\item  Models locked in close combat block Line of Sight up to
+those model's Size.
+\item  Individual models in a Unit must have LOS in order for
+them to fire.
+\item  Units further than 6” within Area Terrain may not be
+targeted, nor may they shoot, unless they are taller than the
+Area Terrain.
+\item Units may shoot targets behind, or deeper than 6” into
+Area Terrain if they have a higher elevation, such as from a
+cliff or building.
+\end{itemize}
+
+\subsection{Roll to Hit}
+For all models able to Shoot at the target after the previous
+steps, roll a d6 per shot and compare to a target number equal
+to 7 – BS. There is normally no such thing as an automatic hit,
+and a roll of 1 always misses.
+
+Roll all To-Hit dice together. If firing multiple different weapons,
+roll them separately so to not confuse the Hits, or use dice of
+a different color to represent the different weapons' shots.
+
+\subsection{Roll to Wound}
+
+For all successful Hits, compare the Weapon's Strength
+against the target's Toughness according to the table below.
+The number indicated is the minimum face value on a d6
+needed for the Hit to cause a Wounding Hit. Results of N mean
+the Hit has no effect.
+
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[0.6,c] X[1,c] |  X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c] X[1,c]},
+	rows = {m},
+	rowsep = 3pt
+	% columns = {10em,c},
+	% column{1} = {1.75em,c}
+}
+\SetCell[c=12]{c} Defender's Toughness\\
+ &    &  1 & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 \\\hline
+\SetCell[r=10]{m} \rotatebox[origin=c]{90}{Weapons's Strength}
+ &  1 & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  & -  & -  \\
+ &  2 & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  & -  \\
+ &  3 & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  & -  \\
+ &  4 & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  & -  \\
+ &  5 & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  & -  \\
+ &  6 & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ & -  \\
+ &  7 & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ & 6+ \\
+ &  8 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ & 6+ \\
+ &  9 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ & 5+ \\
+ & 10 & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 2+ & 3+ & 4+ \\
+\end{tblr}
+
+
+When determining To Wound rolls, use whatever is the
+majority of T in the enemy Unit. Where there is no majority,
+always use the lower of the two values.
+
+
+\subsection{Wound Allocation}
+After determining the number of Wounding Hits, make Armor
+Saves for all Hits. When Allocating Wounding Hits, no single
+model may be said to take all hits (unless it is the only valid
+target). Once all Wounding Hits and Wounds have been dealt,
+if excess damage was dealt it is wasted. If only one Sv is being
+used, once made for all Wounding Hits Wounds may then be
+allocated to any models the targeted Unit/s player chooses, so
+long as there are no multi-Wound models that have already
+taken a Wound. Wounds must be applied to them first, without
+“spreading around” the damage to their fellows.
+
+Units with multi-wound models must remove whole multi-
+wound models as casualties where possible. Wounds cannot
+be spread around.
+
+\subsubsection{Who Can Have A Wound Allocated?}
+{\bfseries Shooting:} Only models in range of the weapon causing the
+save, or in line of sight, or eligible to have a wound allocated.
+Torrent of Fire: When a unit suffers as many (or more)
+wounding hits from the firing of a single enemy unit as it has
+models, the shooting player can nominate one model in the
+target unit that could be a casualty. This model must make a
+save against one of the wounding hits.
+
+The owning player can choose which wounding hit the model
+saves against, and if the model has more than one save, can
+choose which one. Then all other saves are taken as normal.
+Close Combat: Only Engaged models in close combat are
+eligible to have wounds allocated to them.
+Casualties must be removed in such a way that the unit's
+coherency is maintained.
+
+\subsubsection{If a Unit has Mixed Armor}
+\begin{enumerate}
+\item Count up models of each Sv value (only valid targets).
+\item Determine the majority Sv, in the case of a tie the worst
+Sv is assumed to be the majority.
+\item Apply Wounding Hits to the majority Sv first. If there are
+any remaining Wounding Hits, apply to any remaining
+models.
+\item Incoming hits form “sets” where every model must have
+a Wounding Hit allocated before the next set is allocated.
+\end{enumerate}
+
+Once determined, check if any have to contend with Armor
+Piercing for any or all allocated Wounding Hits. If so, resolve
+those first then roll saving throws.
+
+\subsection{Saving Throws}
+Each model gets only one Saving Throw, chosen from
+whichever options they have available to them. For each failed
+Saving Throw the model takes a Wound.
+
+When Wounds taken = W Characteristic, remove the model.
+
+\subsubsection{Instant Death}
+When Weapon S Characteristic is 2x Target’s T Characteristic,
+multiple Wound models suffer Instant Death on a failed Saving
+Throw and are immediately killed.
+
+\subsubsection{Armor Piercing Weapons (AP)}
+When the Armor Piercing (AP) value is equal to or lower than
+the target’s Sv the armor is ineffective and the model gets no
+Saving Throw. If the AP value is higher the target makes a
+Saving Throw as normal.
+
+
+\subsubsection{Invulnerable Saves}
+Models with an Invulnerable Save in their Profile may make
+this Saving Throw if AP negates their normal Sv.
+
+\subsubsection{Cover Saves}
+If a Unit has more models within a piece of Cover than without
+the entire Unit has a Cover Save. Cover Saves ignore Weapon
+AP.
+
+\begin{tblr}{
+	colsep = 0pt,
+	width = \linewidth,
+	colspec = {X[3,l] X[1,c] X[1.5,c]},
+	% columns = {3em, c},
+	% column{1} = {10em, l}
+	}
+Terrain Type & Save & Models Effected \\\hline 
+Brushes, Fences & 6+ & Size 1-2 \\
+Crates, Pipes, Partially within & 5+ & Size 1-3\\
+Wrecks, Ruins, Trenches & 4+ & Size 1-3\\
+Bunkers, Fortifications & 3+ & Size 1\\
+\end{tblr}
+
+
+
+\subsection{Morale Checks For Casualties}
+Any Unit suffering at least 25\% casualties to shooting during a
+single Shooting Phase must make a Morale Test (see page
+\pageref{sec:morale}).
+
+\subsection{Repeat}
+Return to Step 1 and resolve Shooting for all Units that have
+not yet done so.
+
+\stopcountsubsections
