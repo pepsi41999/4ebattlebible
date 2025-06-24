@@ -1,0 +1,379 @@
+\ProvidesPackage{warhammerweaponentry}[April 6, 2020]
+
+%Warhammer weapon entry is a extraction of my warhammer weapon entry written a long time ago in expl3 as part of
+%my ubiquitous "codex" class.
+
+%it is for generating streamlining easy generation of weapon entries.
+
+
+\RequirePackage{tabularx} 			%more tables
+\RequirePackage{colortbl}           %for row colors and the like
+    \definecolor{mycellcolor}{rgb}{0.88,1,1}    %defines a light teal color for cells
+
+
+
+\RequirePackage[dvipsnames,table]{xcolor}
+
+
+\RequirePackage{xparse}%allows complex command define commands
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%##EXPL3 DESIGN SPACE%%%%%%%%%%%%%%%%%%%%%%%%#
+
+\ExplSyntaxOn
+
+
+%%%%%%%%%%%
+
+%*******************************************arrays*******************************************************%
+%sequnces are indexible data structures
+
+
+
+%These five attributes store weapon data as it is parsed in with  \weapon{name}{range}{strength}{armourpen}{type}
+\seq_new:N \weaponnames_wwe%stores the weapon names for the table entries
+\seq_new:N \range_wwe%
+\seq_new:N \strength_wwe%
+\seq_new:N \armourpen_wwe%
+\seq_new:N \type_wwe%
+
+\seq_new:N \itemwrule_wwe %every other 'entity' is rule/name
+\seq_new:N \itemwrules_wwe
+
+\seq_new:N \tocolorrow_wwe%array for final table row colors 
+
+
+%*******************************************tokenlists***************************************************%
+\tl_new:N \itemname_wwe%used to store the weapon title
+\tl_new:N \itemwarp_wwe%used to store the weapon title
+\tl_new:N \itemdescr_wwe%used to store the description
+\tl_new:N \itemnote_wwe%used to store a note between the description and the main table
+
+\tl_new:N \tablebody_wwe%used to the table as it is generated and then printed
+\tl_new:N \templist_wwe
+\tl_new:N \templista_wwe
+\tl_new:N \templistb_wwe
+
+
+%*******************************************counters*****************************************************%
+
+\int_new:N \weaponcount_wwe \int_set:Nn \weaponcount_wwe {0}%keeps track of how many weapons are in the table
+
+\int_new:N \wrulecount_wwe \int_set:Nn \wrulecount_wwe {0}%keeps track of how many special rules to print.
+\int_new:N \wrulescount_wwe \int_set:Nn \wrulescount_wwe {0}%keeps track of how many special rules to print.
+
+
+%*******************************************booleans*****************************************************%
+\int_new:N \tocolor_wwe            % 1 = white, !1 = mycellcolor
+    \int_set:Nn {\tocolor_wwe} {1}    % initially white
+
+
+%if the first entry has the name field not populated, the table will be printed without names
+%this is common for weapons with only 1 entry in their table.
+\int_new:N \juststarted_wwe%used to test first entry for isnamed condition
+\int_new:N \isnamed_wwe%result of isnamed condition check
+
+%********************************Global_variable_storage_commands****************************************%
+\NewDocumentCommand{\wname}{s+m} {%set command for names
+    \tl_set:Nn \itemname_wwe {#2}
+}
+
+\NewDocumentCommand{\wwarp}{s+m} {%set command for warp level
+    \tl_set:Nn \itemwarp_wwe {#2}
+}
+
+\NewDocumentCommand{\wdescr}{s+m} {%set command for descriptions
+    \tl_set:Nn \itemdescr_wwe {#2}
+}
+\NewDocumentCommand{\wnote}{s+m} {%set command for notes
+    \tl_set:Nn \itemnote_wwe {#2}
+}
+
+\NewDocumentCommand{\wrule}{sm+m} {%set command for weapon rules
+    \seq_put_right:Nn \itemwrule_wwe {#2}
+    \seq_put_right:Nn \itemwrule_wwe {#3}
+    \int_incr:N \wrulecount_wwe
+}
+
+\NewDocumentCommand{\wrules}{sO{}+m} {
+    \seq_put_right:Nn \itemwrules_wwe {#2}
+    \seq_put_right:Nn \itemwrules_wwe {#3}
+    \int_incr:N \wrulescount_wwe
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand{\makewargear}{}{
+    \group_begin:
+    \tl_if_empty:NF \itemname_wwe {%
+        {\color{black}\sffamily\bfseries \tl_use:N \itemname_wwe}\par\nobreak
+        % \vspace{1.5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemdescr_wwe {%
+        \textit{\tl_use:N \itemdescr_wwe}\par
+        % \vspace{5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemnote_wwe {%
+        \tl_use:N \itemnote_wwe\par
+    }
+    \group_end:
+    \clearweapons_wwe:n {}
+    % \tl_if_empty:NF \itemname_wwe {
+    %     {\color{black}\bookfont\bfseries \tl_use:N \itemname_wwe} \\
+    %     \vspace{1.5pt plus 0.5pt minus 0.5pt}
+    % }
+    % \tl_if_empty:NF \itemdescr_wwe {
+    %     \textit{\tl_use:N \itemdescr_wwe} \\
+    %     \vspace{5pt plus 0.5pt minus 0.5pt}
+    % }
+    % \tl_if_empty:NF \itemnote_wwe {
+    %     \tl_use:N \itemnote_wwe \\
+    % }
+    % \vspace{10pt plus 1pt minus 1pt}
+    % \clearweapons_wwe:n {}
+}
+
+\NewDocumentCommand{\makepower}{}{
+    \group_begin:
+    \tl_if_empty:NF \itemname_wwe {%
+        {\color{black}\sffamily\bfseries \tl_use:N \itemname_wwe \dotfill Warp~Level~\tl_use:N \itemwarp_wwe}\par\nobreak
+        % \vspace{1.5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemdescr_wwe {%
+        \textit{\tl_use:N \itemdescr_wwe}\par
+        % \vspace{5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemnote_wwe {%
+        \tl_use:N \itemnote_wwe\par
+    }
+    \int_compare:nF {\weaponcount_wwe=0}{%if no weapons dont print
+        \int_compare:nTF {\isnamed_wwe=0}{%prints table, named or unnamed
+            \unnamed_weapon_wwe:n {}
+        }{
+            \named_weapon_wwe:n {}
+        }
+    }
+    \int_compare:nTF {\wrulescount_wwe=0}{
+    }{
+        \par\printwrules_wwe:n {}
+    }
+    % \vspace*{5pt plus 1pt minus 1pt}
+    \vspace{10pt plus 1pt minus 1pt}
+    \group_end:
+    \clearweapons_wwe:n {}%clears an resets all variables for next usage.
+}
+
+
+\NewDocumentCommand{\weapon}{smmmmm} {% #1 = star (case of weapon subtype)
+    \int_compare:nT {\juststarted_wwe=0} {
+        \tl_if_empty:nTF {#2} {%if the first entry has no name, the whole table will be nameless
+            \int_set:Nn \isnamed_wwe {0}
+        }{
+            \int_set:Nn \isnamed_wwe {1}
+        }
+        \int_set:Nn \juststarted_wwe {1}%this will be turned back to 0 at the end of makeweapon
+    }
+    \bool_if:NTF #1 {%flips color when needed
+        \int_set:Nn {\tocolor_wwe} {\tocolor_wwe}
+    }{
+        \int_set:Nn {\tocolor_wwe} {-1*\tocolor_wwe}
+    }
+    \seq_put_right:Nx \tocolorrow_wwe {\int_use:N \tocolor_wwe}
+    \seq_put_right:Nn \weaponnames_wwe {#2}
+    \seq_put_right:Nn \range_wwe{#3}
+    \seq_put_right:Nn \strength_wwe {#4}
+    \seq_put_right:Nn \armourpen_wwe {#5}
+    \seq_put_right:Nn \type_wwe {#6}
+    \int_incr:N \weaponcount_wwe
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand{\makeweapon}{}{
+    \group_begin:
+    \tl_if_empty:NF \itemname_wwe {%prints the weapon name
+        {\color{black}\sffamily\bfseries \tl_use:N \itemname_wwe}\par\nobreak
+        % \vspace*{1.5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemdescr_wwe {%prints the weapon description
+        \textit{\tl_use:N \itemdescr_wwe}\par
+        % \vspace*{5pt plus 0.5pt minus 0.5pt}
+    }
+    \tl_if_empty:NF \itemnote_wwe {%prints the weapon note
+        \tl_use:N \itemnote_wwe\par
+        % \vspace*{2.5pt plus 0.5pt minus 0.5pt}
+    }
+    \int_compare:nTF {\isnamed_wwe=0}{%prints table, named or unnamed
+        \unnamed_weapon_wwe:n {}
+    }{
+        \named_weapon_wwe:n {}
+    }
+    % \\\vspace*{2.5pt plus 0.5pt minus 0.5pt}
+    \int_compare:nTF {\wrulecount_wwe=0}{
+    }{
+        \par\printwrule_wwe:n {}
+    }
+    \int_compare:nTF {\wrulescount_wwe=0}{
+    }{
+        \par\printwrules_wwe:n {}
+    }
+    % \vspace*{5pt plus 1pt minus 1pt}
+    \vspace{10pt plus 1pt minus 1pt}
+    \group_end:
+    \clearweapons_wwe:n {}%clears an resets all variables for next usage.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cs_new_protected:Nn \unnamed_weapon_wwe:n {%responsible for generating the table for unnamed weapons
+    \setlength{\tabcolsep}{0pt}
+    \renewcommand{\arraystretch}{1.2}
+    %Table settings for un-named entrys, R C C T
+    \newcolumntype{R}{>{\hsize=0.2\linewidth \centering\arraybackslash}X}%
+    \newcolumntype{C}{>{\hsize=0.175\linewidth \centering\arraybackslash}X}%
+    \newcolumntype{T}{>{\hsize=0.475\linewidth \raggedright\arraybackslash}X}%
+    
+    % the table preamble
+    \tl_set:Nn \tablebody_wwe {
+        \begin{tabularx}{1.00\linewidth}{ R C C T }
+        \textbf{Range} & \textbf{S}& \textbf{AP}& \textbf{Type}\\
+        \hline
+    }
+
+    %build rows
+    \int_step_inline:nnnn { 1 } { 1 } {\weaponcount_wwe}{
+        \int_compare:nNnT {\seq_item:Nn \tocolorrow_wwe {##1}}{=}{1}{
+            \tl_put_right:Nn \tablebody_wwe {\rowcolor{mycellcolor}}
+        }
+        \tl_put_right:Nn \tablebody_wwe {
+            \seq_item:Nn \range_wwe {##1} &
+            \seq_item:Nn \strength_wwe {##1} &
+            \seq_item:Nn \armourpen_wwe {##1} &
+            \seq_item:Nn \type_wwe {##1} \\
+        }
+    }
+    \tl_put_right:Nn \tablebody_wwe { \end{tabularx} } % end of the table
+    \tl_use:N \tablebody_wwe % print the table
+}
+
+%obsolete, left here so older documents still compile.
+\cs_new_protected:Nn \printwrule_wwe:n {
+    \int_step_inline:nnnn { 0 } { 1 } {\wrulecount_wwe - 1}{
+        \textbf{\seq_item:Nn \itemwrule_wwe {##1 * 2 + 1} : }
+        {~} \seq_item:Nn \itemwrule_wwe {##1 * 2 + 2}\\
+    }
+}
+
+
+%this funtion is the new one, it can build as many as you want
+\cs_new_protected:Nn \printwrules_wwe:n {
+    \int_step_inline:nnnn { 0 } { 1 } {\wrulescount_wwe - 1}{
+        \tl_set:Nf \templist_wwe {\seq_item:Nn \itemwrules_wwe {##1 * 2 + 1}}
+        % \tl_set:Nf \templista_wwe {\seq_item:Nn \itemwrules_wwe {##1 * 2 + 1}}
+        \tl_set:Nf \templista_wwe {}
+        \tl_if_eq:NNF \templist_wwe \templista_wwe {
+            \textbf{\tl_use:N \templist_wwe : {~} }
+            % \textbf{\seq_item:Nn \itemwrules_wwe {##1 * 2 + 1} : {~} }
+        }
+        \seq_item:Nn \itemwrules_wwe {##1 * 2 + 2}
+        \int_compare:nT{##1 != \wrulescount_wwe - 1}{
+            \\
+        }
+    }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cs_new_protected:Nn \named_weapon_wwe:n {%responsible for generating the table for named weapons
+    \setlength{\tabcolsep}{0pt}
+    \renewcommand{\arraystretch}{1.2}
+    %Table settings for named entrys, N C C C T
+    \newcolumntype{N}{>{\hsize=0.4\linewidth \raggedright\arraybackslash}X}%
+    \newcolumntype{R}{>{\hsize=0.175\linewidth \centering\arraybackslash}X}%
+    \newcolumntype{C}{>{\hsize=0.15\linewidth \centering\arraybackslash}X}%
+    \newcolumntype{T}{>{\hsize=0.3\linewidth \raggedright\arraybackslash}X}%
+    
+    % the table preamble
+    \tl_set:Nn \tablebody_wwe {
+        \begin{tabularx}{1.00\linewidth}{ N R C C T }
+        & \textbf{Range} & \textbf{S}& \textbf{AP}& \textbf{Type}\\
+        \hline
+    }
+
+    %build rows
+    \int_step_inline:nnnn { 1 } { 1 } {\weaponcount_wwe}{
+        \int_compare:nNnT {\seq_item:Nn \tocolorrow_wwe {##1}}{=}{1}{
+            \tl_put_right:Nn \tablebody_wwe {\rowcolor{mycellcolor}}
+        }
+        \tl_put_right:Nn \tablebody_wwe {
+            \seq_item:Nn \weaponnames_wwe {##1} &
+            \seq_item:Nn \range_wwe {##1} &
+            \seq_item:Nn \strength_wwe {##1} &
+            \seq_item:Nn \armourpen_wwe {##1} &
+            \seq_item:Nn \type_wwe {##1} \\
+        }
+    }
+    \tl_put_right:Nn \tablebody_wwe { \end{tabularx} } % end of the table
+    \tl_use:N \tablebody_wwe % print the table
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cs_new:Nn \clearweapons_wwe:n {%this rule clears all the variables so they dont get printed again on accident if not overridden by the next entry,
+    \tl_clear:N \itemname_wwe%
+    \tl_clear:N \itemwarp_wwe%
+    \tl_clear:N \itemdescr_wwe%
+    \tl_clear:N \itemnote_wwe%
+    %
+    \int_zero:N \wrulecount_wwe%
+    \seq_clear:N \itemwrule_wwe%
+    \int_zero:N \wrulescount_wwe%
+    \seq_clear:N \itemwrules_wwe%
+    %
+    \seq_clear:N \tocolorrow_wwe%
+    \int_set:Nn \juststarted_wwe {0}%
+    \int_set:Nn \tocolor_wwe {1}%
+    % \int_set:Nn \isnamed {1}%This does not need to be cleared
+    %
+    \seq_clear:N \weaponnames_wwe%
+    \seq_clear:N \range_wwe%
+    \seq_clear:N \strength_wwe%
+    \seq_clear:N \armourpen_wwe%
+    \seq_clear:N \type_wwe%
+    \int_zero:N \weaponcount_wwe%
+    %
+    \tl_clear:N \tablebody_wwe%
+    \tl_clear:N \templist_wwe%
+    \tl_clear:N \templista_wwe%
+    \tl_clear:N \templistb_wwe%
+}
+
+
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%EXAMPLE USE CASE%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \name{Whirlwind Multiple Missile Launcher}
+% \descr{This enormous missile system mounted onto the whirlwind is capable of delivering a devastating blow to enemy lines. Each of the large missiles housed inside the missile racks is home to a assortment of a variety of warheads. When fired these missiles will arc high into the air above their target and upon decent, fracture releasing their deadly payload to cover a very large radius. Armed with a mixture of warhead types, the Whirlwind is a capable threat to a wide range of targets.}
+
+% \note{The whirlwind multiple missile launcher may only fire one type of missile for the duration of the battle which must be chosen during deployment.}
+
+% \weapon{Vengeance}{48"}{5}{4}{Heavy 1, Barrage, Large Blast}
+% \weapon{Castellan}{48}{6}{-}{Heavy 1, Barrage, Large Blast, Mines!}
+
+% \wrule{Mines!}{If in the final position of the Castellan blast zone there are no models, instead place a marker the size of a large blast template to represent the mine field. For every enemy model to move through or into the marker roll a d6 -- on a 4+ the model triggers a mine and takes a Strength 6 AP - hit. The mine field is removed at the end of the phase after it was triggered a second time -- all the mine have been used up.}
+
+
+% \makeweapon
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\endinput

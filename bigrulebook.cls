@@ -4,8 +4,9 @@
 \LoadClass[openany, letterpaper, 9pt]{memoir}
 \RequirePackage[english]{babel}
 
-\RequirePackage{graphicx}%needed for scalebox for extra large text
+\RequirePackage{interface999}
 
+\RequirePackage{graphicx}%needed for scalebox for extra large text
 
 \RequirePackage{lipsum}
 
@@ -80,22 +81,6 @@
 
 \RequirePackage[colorlinks=true, linkcolor = black]{hyperref}%Make sure it comes last of your loaded packages (page 5 in manual)
 \RequirePackage{bookmark}%allows for colored toc links. Allows for subsections without a section. Has to be loaded after hyperref.
-
-
-
-\ExplSyntaxOn
-\NewDocumentCommand{\cost}{m}{%special macro for auto formating points!
-	\fp_compare:nTF {#1 = 0}{%if equals 0
-		\dotfill free
-	}{%else
-		\fp_compare:nTF {#1 = 1}{%if equals 1
-			\dotfill #1~point
-		}{%else
-			\dotfill #1~points	
-		}
-	}
-}
-\ExplSyntaxOff
 
 
 

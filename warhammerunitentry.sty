@@ -1,0 +1,520 @@
+\ProvidesPackage{warhammerunitentry}[Octobert 19, 2022]
+
+%Warhammer unit entry is a extraction of my warhammer weapon entry written a long time ago in expl3 as part of
+%my ubiquitous "codex" class.
+
+%it is for generating streamlining easy generation of weapon entries.
+
+
+\RequirePackage{tabularx}           %more tables
+\RequirePackage{colortbl}           %for row colors and the like
+    \definecolor{mycellcolor}{rgb}{0.88,1,1}    %defines a light teal color for cells
+
+\RequirePackage[usenames,dvipsnames,table]{xcolor}
+
+
+\RequirePackage{multicol}			%easy multicolumn spanning pages
+    \columnsep=5ex
+    % \columnseprule=0.4pt
+    % \flushcolumns
+    \raggedcolumns
+
+
+\RequirePackage{xparse}                 %enables expl3 coding, and newdocumentcommand
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%##EXPL3 DESIGN SPACE%%%%%%%%%%%%%%%%%%%%%%%%#
+
+
+\ExplSyntaxOn
+
+
+%************************************HERE_LIES_MAKEWEAPON************************************************%
+
+
+
+%*******************************************sequences*******************************************************%
+% sequences are indexable, likea like mutable arrays
+% \seq_new:N \weaponnames
+% \seq_new:N \range
+% \seq_new:N \strength
+% \seq_new:N \armourpen
+% \seq_new:N \type
+% \seq_new:N \damage
+
+% \seq_new:N \itemwrule %every other 'entity' is a rule or name, i.e they come in pairs, rule name rule namr rule name etc.
+
+\seq_new:N \itemwargear_wue
+\seq_new:N \itemsrules_wue
+\seq_new:N \itempsyker_wue
+
+
+\seq_new:N \itemmarks_wue
+\seq_new:N \itemoptions_wue
+\seq_new:N \itembiomorphs_wue
+\seq_new:N \itemleader_wue
+\seq_new:N \itemvehicleupgrades_wue
+\seq_new:N \itemtransport_wue
+\seq_new:N \itemsupernote_wue
+
+\seq_new:N \entryuvw_wue %will either be u, w, or v  %9th ed wont have w or v but I will leave the components in for reference
+\seq_new:N \itemunitname_wue
+\seq_new:N \itemstatline_wue
+\seq_new:N \itemunittype_wue
+\seq_new:N \itemunitcomp_wue
+\seq_new:N \itemcomposition_wue
+
+
+\seq_new:N \itemname_wue
+\seq_new:N \itempoints_wue
+\seq_new:N \itemdescr_wue
+\seq_new:N \itemnote_wue
+
+\seq_new:N \tempseq_wue
+%*******************************************tokenlists***************************************************%
+% I dont remember why these are different from arrays, acutally I think they are not indexable
+
+\tl_new:N \templist_wue
+\tl_new:N \templista_wue
+\tl_new:N \templistb_wue
+
+\tl_new:N \tablebody_wue
+
+%*******************************************counters*****************************************************%
+% used to keep track of how many things have been added into the arrays
+\int_new:N \weaponcount_wue \int_set:Nn \weaponcount_wue {0}
+\int_new:N \wrulecount_wue \int_set:Nn \wrulecount_wue {0}
+\int_new:N \unitcount_wue \int_set:Nn \unitcount_wue {0}
+
+%*******************************************booleans*****************************************************%
+% not real booleans, just integers that are either 1 or not 1 (not even sure if I used 0 as the 
+%  other state, -1,1 would be easier to toggle)
+\int_new:N \tocolor_wue            % 1 = white, !1 = mycellcolor
+\int_set:Nn {\tocolor_wue} {1}    % initially white
+\int_new:N \juststarted_wue
+\int_new:N \isnamed_wue
+
+%********************************Global_variable_storage_commands****************************************%
+% these are set commands that are used to store user data into their respective sequence or token list
+
+\NewDocumentCommand{\uname}{s+m} {
+    \seq_clear:N \itemname_wue% these are not supposed to build beyond 1. Thats probably why I made them token lists when I first did it.  I dont remember the reason I wanted to change them into sequences for ocd reasons. They remain token lists in warhammerweaponentry, which is probly why that doesnt have the same issue. This is really two problems at once, because the crappy solution for interface999 calling both uname and wname at once. I never noticed it until now because some how for reason I do not understand at all, if you encapsulate stuff in either minipages or multicols (which I do for the armoury stuff) insulates things after it. Maybe that is a nuance to environments as a core part of latex?
+	\seq_put_right:Nn \itemname_wue {#2}
+}
+
+\NewDocumentCommand{\points}{s+m} {
+	\seq_put_right:Nn \itempoints_wue {#2}
+}
+
+\NewDocumentCommand{\udescr}{s+m} {
+    \seq_clear:N \itemdescr_wue
+	\seq_put_right:Nn \itemdescr_wue {#2}
+}
+\NewDocumentCommand{\unote}{s+m} {
+    \seq_clear:N \itemnote_wue
+	\seq_put_right:Nn \itemnote_wue {#2}
+}
+
+\NewDocumentCommand{\unittype}{sO{Unit~Type}+m} {
+    \seq_put_right:Nn \itemunittype_wue {#2}
+    \seq_put_right:Nn \itemunittype_wue {#3}
+}
+
+\NewDocumentCommand{\composition}{sO{Composition}+m} {
+    \seq_put_right:Nn \itemcomposition_wue {#2}
+    \seq_put_right:Nn \itemcomposition_wue {#3}
+}
+
+
+\NewDocumentCommand{\unitcomp}{sO{Unit~Composition}+m} {
+    \seq_put_right:Nn \itemunitcomp_wue {#2}
+    \seq_put_right:Nn \itemunitcomp_wue {#3}
+}
+
+\NewDocumentCommand{\wargear}{sO{Wargear}+m} {
+	\seq_put_right:Nn \itemwargear_wue {#2}
+	\seq_put_right:Nn \itemwargear_wue {#3}
+}
+
+\NewDocumentCommand{\srules}{sO{Special~Rules}+m} {
+	\seq_put_right:Nn \itemsrules_wue {#2}
+	\seq_put_right:Nn \itemsrules_wue {#3}
+}
+
+\NewDocumentCommand{\psyker}{sO{Psyker}+m} {
+	\seq_put_right:Nn \itempsyker_wue {#2}
+	\seq_put_right:Nn \itempsyker_wue {#3}
+}
+
+\NewDocumentCommand{\icons}{sO{Marks~of~Chaos}+m} {
+    \seq_put_right:Nn \itemmarks_wue {#2}
+    \seq_put_right:Nn \itemmarks_wue {#3}
+}
+
+\NewDocumentCommand{\options}{sO{Options}+m} {
+	\seq_put_right:Nn \itemoptions_wue {#2}
+	\seq_put_right:Nn \itemoptions_wue {#3}
+}
+
+\NewDocumentCommand{\biomorphs}{sO{Biomorphs}+m} {
+	\seq_put_right:Nn \itembiomorphs_wue {#2}
+	\seq_put_right:Nn \itembiomorphs_wue {#3}
+}
+
+\NewDocumentCommand{\leader}{sO{Sergeant}+m} {
+	\seq_put_right:Nn \itemleader_wue {#2}
+	\seq_put_right:Nn \itemleader_wue {#3}
+}
+
+\NewDocumentCommand{\vehicleupgrades}{sO{Upgrades}+m} {
+	\seq_put_right:Nn \itemvehicleupgrades_wue {#2}
+	\seq_put_right:Nn \itemvehicleupgrades_wue {#3}
+}
+
+\NewDocumentCommand{\transport}{sO{Transport}+m} {
+	\seq_put_right:Nn \itemtransport_wue {#2}
+	\seq_put_right:Nn \itemtransport_wue {#3}
+}
+
+\NewDocumentCommand{\supernote}{s+m} {
+	\seq_put_right:Nn \itemsupernote_wue {#2}
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% the makestrat command will takes a name, description, and note and print them out.
+% names are smallcaps bold, descriptions are italic, notes are upright
+% \definecolor{strategemcolorone}{rgb}{0.414,0.648,0.570}
+
+% \NewDocumentCommand{\makestrat}{}{
+%     \tl_if_empty:NF \itemname {
+%         % {\color{black}\bookfont\bfseries \tl_use:N \itemname \hfill \itempoints} \\
+%         \drawstratshell
+%         \vspace{1.5pt plus 0.5pt minus 0.5pt}
+%     }
+%     \tl_if_empty:NF \itemdescr {
+%         \textit{\tl_use:N \itemdescr} \\
+%         \vspace{5pt plus 0.5pt minus 0.5pt}
+%     }
+%     \tl_if_empty:NF \itemnote {
+%         \tl_use:N \itemnote \\
+%     }
+%     \vspace{10pt plus 1pt minus 1pt}
+%     \clearweapons:n {}
+% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Following are the unit entry commands. There are three types, standard, u, vehicle, v, and walker, w
+% When called they store the unit name, statline, type, and unit composition with a single command, as well as log the type of entry
+% When the makeentry command is called, entryuvw will be used to determine how to process and print the information.
+
+\NewDocumentCommand{\uentry}{smm} {%regularunit
+    \seq_put_right:Nn \entryuvw_wue {u}
+    \seq_put_right:Nn \itemunitname_wue {#2}
+	\seq_put_right:Nn \itemstatline_wue {#3}
+	% \seq_put_right:Nn \itemunittype {#4}
+	% \seq_put_right:Nn \itemunitcomp {#5}
+    \int_incr:N \unitcount_wue
+}
+
+
+\NewDocumentCommand{\ventry}{smm} {%vehicle entry
+    \seq_put_right:Nn \entryuvw_wue  {v}
+    \seq_put_right:Nn \itemunitname_wue  {#2}
+	\seq_put_right:Nn \itemstatline_wue  {#3}
+	% \seq_put_right:Nn \unittype {#4}
+	% \seq_put_right:Nn \unitcomp {#5}
+    \int_incr:N \unitcount_wue 
+}
+
+\NewDocumentCommand{\wentry}{smm} {%walker entry
+    \seq_put_right:Nn \entryuvw_wue  {w}
+    \seq_put_right:Nn \itemunitname_wue  {#2}
+	\seq_put_right:Nn \itemstatline_wue  {#3}
+	% \seq_put_right:Nn \unittype {#4}
+	% \seq_put_right:Nn \unitcomp {#5}
+    \int_incr:N \unitcount_wue 
+}
+
+% % propery lists are like dictionarys with keys and indexes
+\prop_new:N \tablestart_wue%makes a new property list
+
+% define the table starting sequence for for entryuvw==u
+\prop_put:Nnn \tablestart_wue {u}{
+\begin{tabularx}{\linewidth}{ X C C C C C C C C C }
+& {\bfseries WS} & {\bfseries BS} & {\bfseries S} & {\bfseries T} & {\bfseries W} & {\bfseries I} & {\bfseries A} & {\bfseries Ld} & {\bfseries Sv} \\
+}
+% define the table starting sequence for for entryuvw==v
+\prop_put:Nnn \tablestart_wue {v}{
+\begin{tabularx}{\linewidth}{ X B V }
+& {\bfseries \reflectbox{\textlnot}Armour\textlnot} &
+\end{tabularx}\\
+\begin{tabularx}{\linewidth}{ X V V V V V}
+& {\bfseries BS} & {\bfseries Front} & {\bfseries Side} & {\bfseries Rear} & {\bfseries Hp} \\
+}
+% define the table starting sequence for for entryuvw==w
+\prop_put:Nnn \tablestart_wue {w}{
+\begin{tabularx}{\linewidth}{ X A A }
+& {\bfseries \reflectbox{\textlnot}Armour\textlnot} &
+\end{tabularx}\\
+\begin{tabularx}{\linewidth}{ X C C C C C C C C C }
+& {\bfseries WS} & {\bfseries BS} & {\bfseries S} & {\bfseries F} & {\bfseries S} & {\bfseries R} & {\bfseries I} & {\bfseries A} & {\bfseries Hp} \\
+}
+
+% % the makeentry command begins processing of entry date, and prints it out into a unit entry.
+%The normal use will print a full unit entry page formatting all the details
+%calling \makeentry* will result in just the statline formatted for the current linewidth.
+\NewDocumentCommand{\makeentry}{s}{
+    \group_begin:
+    \IfBooleanTF {#1} {%star
+        \parbox[t]{\linewidth}{%
+            \make_entryline_wue:n {}%calls the helper function responsible for printing the unit profile
+        }\\%endparbox
+    } {%nostar
+    	\parbox[t]{\linewidth}{
+            \seq_if_empty:NF \itemname_wue {%prints the unit name
+                {\large\bfseries \seq_item:Nn \itemname_wue {1}} \dotfill {\large\bfseries \seq_item:Nn \itempoints_wue {1}}\\
+            }
+            % \seq_if_empty:NF \itemnote_wue {%prints the note
+            %     \seq_item:Nn \itemnote_wue {1}\\\\
+            % }
+            \filldetails_wue:n {}%calls the helper function responsible for printing the wargear, options, and the like.
+        }%endparbox
+    }
+    \group_end:
+    \clearentrys_wue:n {}%clears an resets all variables for next usage.
+}
+
+% % a helper function used to keep the core of makefuntion readable. This is responsible for printing the unit profile
+\cs_new_protected:Nn \make_entryline_wue:n {
+	\setlength{\tabcolsep}{0pt}
+    \renewcommand{\arraystretch}{1.2}
+    % N C C C C C C C C C C T U for organics
+	% N C C C A for armour
+    % N C C C C C C C C C C T U for walkers
+    % N C A for armour
+    %  N C C C C C B T U  for vehicles
+    \newcolumntype{N}{>{\hsize=28ex \raggedright\arraybackslash}X}%Name
+    \newcolumntype{C}{>{\hsize=5ex \centering\arraybackslash}X}%Char
+    \newcolumntype{V}{>{\hsize=8ex \centering\arraybackslash}X}%Vehiclechar
+    \newcolumntype{T}{>{\hsize=36ex \raggedright\arraybackslash}X}%Type
+    \newcolumntype{U}{>{\hsize=30ex \raggedright\arraybackslash}X}%UComp
+    \newcolumntype{A}{>{\hsize=15ex \centering\arraybackslash}X}%Armour
+    \newcolumntype{B}{>{\hsize=25ex \centering\arraybackslash}X}%Bigarmour
+	%build rows 
+	\int_step_inline:nnnn { 1 } { 1 } {\unitcount_wue}{
+        \tl_set:Nx \templist_wue {\seq_item:Nn \entryuvw_wue {##1}}
+    	\int_compare:nNnTF{##1}{=}{1}{
+            \prop_get:NVN \tablestart_wue \templist_wue \tablebody_wue
+        }{
+        	\tl_set:Nx \templista_wue {\seq_item:Nn \entryuvw_wue {##1-1}}%get last type
+            \tl_set:Nx \templistb_wue {\seq_item:Nn \entryuvw_wue {##1}}%get current type
+        	\tl_if_eq:NNF {\templista_wue} {\templistb_wue} {
+            	    \tl_put_right:Nn \tablebody_wue {\end{tabularx}\\} % end of the table
+    				\prop_get:NVN \tablestart_wue \templist_wue \templist_wue%start new table
+                    \tl_put_right:NV \tablebody_wue \templist_wue
+            }
+        }
+		\tl_set:Nx \templist_wue {\seq_item:Nn \itemstatline_wue {##1}}%extract stat line and place in token list
+        \tl_replace_all:Nnn \templist_wue {~}{&}%replace all spaces with &
+    	\tl_put_right:Nn \tablebody_wue {
+            \seq_item:Nn \itemunitname_wue {##1} &
+        }
+        \tl_put_right:Nx \tablebody_wue {
+            \tl_use:N \templist_wue \\ %re-insert the new & separated stat line
+        }
+     %    \tl_put_right:Nn \tablebody {
+     %        \seq_item:Nn \itemunittype_wue  {##1} &
+     %        \seq_item:Nn \itemunitcomp_wue  {##1} \\
+     %    }
+    }
+    \tl_put_right:Nn \tablebody_wue { \end{tabularx} } % end of the table
+    \tl_use:N \tablebody_wue % print the table
+}
+
+% % a helper function used to keep the core of makefuntion readable. This is responsible for printing the weapons, options, and the like
+\cs_new_protected:Nn \filldetails_wue:n {
+
+    \seq_if_empty:NF \itemdescr_wue {%prints the description
+        \parbox[t]{\linewidth}{
+            \textit{\seq_item:Nn \itemdescr_wue{1}}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemnote_wue {%prints the note
+        \parbox[t]{\linewidth}{%
+            \raggedright
+            \setlength{\parskip}{5.0pt plus 2.0pt}
+            \seq_item:Nn \itemnote_wue{1}
+        }\\\\%endparbox
+    }
+
+	\parbox{\linewidth}{%
+    \begin{multicols}{2}%
+    \seq_if_empty:NF \entryuvw_wue {%prints the statline
+        \parbox[t]{\linewidth}{%
+            \make_entryline_wue:n {}%calls the helper function responsible for printing the unit profile
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemcomposition_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemcomposition_wue {1}}\\
+            \seq_item:Nn \itemcomposition_wue {2}
+        }\\\\%endparbox
+    }
+
+    \begin{multicols}{2}
+    \seq_if_empty:NF \itemunitcomp_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemunitcomp_wue {1}}\\
+            \seq_item:Nn \itemunitcomp_wue {2}%
+        }\\\\%endparbox
+    }%
+    
+    \seq_if_empty:NF \itemunittype_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemunittype_wue {1}}\\
+            \seq_item:Nn \itemunittype_wue {2}%
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemwargear_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemwargear_wue {1}}\\
+            \seq_item:Nn \itemwargear_wue {2}%
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemsrules_wue {
+        \parbox[t]{\linewidth}{%
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemsrules_wue {1}}\\
+            \seq_item:Nn \itemsrules_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itempsyker_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itempsyker_wue {1}}\\
+            \seq_item:Nn \itempsyker_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemtransport_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemtransport_wue {1}}\\
+            \seq_item:Nn \itemtransport_wue {2}
+        }\\\\%endparbox
+    }
+    \end{multicols}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \seq_if_empty:NF \itemmarks_wue {
+        \parbox[t]{\linewidth}{
+            \raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemmarks_wue {1}}\\
+            \seq_item:Nn \itemmarks_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemoptions_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemoptions_wue {1}}\\
+            \seq_item:Nn \itemoptions_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itembiomorphs_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itembiomorphs_wue {1}}\\
+            \seq_item:Nn \itembiomorphs_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemleader_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemleader_wue {1}}\\
+            \seq_item:Nn \itemleader_wue {2}
+        }\\\\%endparbox
+    }
+
+    \seq_if_empty:NF \itemvehicleupgrades_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \textbf{\rule{0em}{1.5em} \seq_item:Nn \itemvehicleupgrades_wue {1}}\\
+            \seq_item:Nn \itemvehicleupgrades_wue {2}
+        }\\\\%endparbox
+    }
+
+    \end{multicols}
+    \seq_if_empty:NF \itemsupernote_wue {
+        \parbox[t]{\linewidth}{
+        	\raggedright
+            \setlength{\parskip}{5.0pt plus 2.0pt}
+            \seq_item:Nn \itemsupernote_wue {1}
+        }\\%endparbox
+    }
+    }%endparbox
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% It is important to clear all the storage variables after every make command. This way remenents from prior entirs do not carry over.
+
+
+% % clears all the variables used with weapons
+% \cs_new:Nn \clearstrats:n {
+%     \tl_clear:N \itemname
+%     \tl_clear:N \itempoints
+%     \tl_clear:N \itemdescr
+%     \tl_clear:N \itemnote
+% }
+
+
+% cleasrs all the variables used with units
+\cs_new:Nn \clearentrys_wue:n {%
+	\seq_clear:N \itemname_wue
+    \seq_clear:N \itempoints_wue
+    \seq_clear:N \itemdescr_wue
+    \seq_clear:N \itemnote_wue
+    
+    \int_zero:N \unitcount_wue
+    \seq_clear:N \entryuvw_wue
+    \seq_clear:N \itemunitname_wue
+	\seq_clear:N \itemstatline_wue
+
+    \seq_clear:N \itemcomposition_wue
+	\seq_clear:N \itemunitcomp_wue
+    \seq_clear:N \itemunittype_wue
+    \seq_clear:N \itemwargear_wue
+
+    \seq_clear:N \itemsrules_wue
+    \seq_clear:N \itempsyker_wue
+    \seq_clear:N \itemmarks_wue
+    \seq_clear:N \itemoptions_wue
+    \seq_clear:N \itembiomorphs_wue
+    \seq_clear:N \itemleader_wue
+    \seq_clear:N \itemvehicleupgrades_wue
+    \seq_clear:N \itemtransport_wue
+    \seq_clear:N \itemsupernote_wue
+
+    \tl_clear:N \tablebody_wue
+}
+
+\ExplSyntaxOff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\endinput

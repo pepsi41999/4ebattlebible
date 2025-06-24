@@ -1,0 +1,150 @@
+\ProvidesPackage{interface999}[November 11, 2022]
+
+%interface999 is a companion package to be used with codex999 in order to print both unit and weapon statlines. It loads warhammerunitentry and warhammerweaponentry, and also includes some helper functions to bridge the two.
+
+%it is for generating streamlining easy generation of weapon entries.
+
+
+% \ProvidesPackage{warhammerweaponentry}[April 6, 2020]
+
+%Warhammer weapon entry is a extraction of my warhammer weapon entry written a long time ago in expl3 as part of
+%my ubiquitous "codex" class.
+
+%it is for generating streamlining easy generation of weapon entries.
+
+\RequirePackage{warhammerunitentry}
+\RequirePackage{warhammerweaponentry}
+
+\RequirePackage{xparse}%allows complex command define commands
+
+\RequirePackage[breakable]{tcolorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%COMMANDS OF CONVENIENCE%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\NewDocumentCommand{\red}{+m}{{\color{red} #1}}
+\NewDocumentCommand{\dev}{+m}{{\color{magenta} #1}}
+\NewDocumentCommand{\notebox}{+m}{\begin{tcolorbox} #1 \end{tcolorbox}}
+
+\NewDocumentEnvironment{redd}{+b}{
+    \color{red}
+    #1
+}
+
+\NewDocumentEnvironment{noteboxx}{+b}{
+    \begin{tcolorbox}
+    #1
+    \end{tcolorbox}
+}
+
+\NewDocumentEnvironment{highlightt}{+b}{
+    \begin{tcolorbox}[%
+        % fontupper = \ttfamily,
+        colback=gray!50!yellow!20,
+        colframe=gray!50!yellow!20,
+        center,
+        width = \linewidth - 0.125in,
+        arc = 0pt,
+        outer arc=0pt,
+        % left = 0pt,
+        % right = 0pt,
+        % top = 0pt,
+        % bottom = 0pt,
+        boxsep = -4pt,
+        breakable
+        ]%
+    #1
+    \end{tcolorbox}
+}
+
+
+\NewDocumentCommand{\highlight}{+m}{%
+    \begin{tcolorbox}[%
+        % fontupper = \ttfamily,
+        colback=gray!50!yellow!20,
+        colframe=gray!50!yellow!20,
+        center,
+        width = \linewidth - 0.125in,
+        arc = 0pt,
+        outer arc=0pt,
+        % left = 0pt,
+        % right = 0pt,
+        % top = 0pt,
+        % bottom = 0pt,
+        boxsep = -4pt,
+        breakable
+        ]%
+    #1
+    \end{tcolorbox}
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%##EXPL3 DESIGN SPACE%%%%%%%%%%%%%%%%%%%%%%%%#
+
+\ExplSyntaxOn
+
+
+\NewDocumentCommand{\name}{s+m} {%set command for names
+    \wname{#2}
+    \uname{#2}
+}
+
+\NewDocumentCommand{\warp}{s+m} {%set command for warp power level
+    \wwarp{#2}
+}
+
+\NewDocumentCommand{\descr}{s+m} {%set command for descriptions
+    \wdescr{#2}
+    \udescr{#2}
+}
+\NewDocumentCommand{\note}{s+m} {%set command for notes
+    \wnote{#2}
+    \unote{#2}
+}
+
+% \fp_new:N \mytempfloat
+
+\NewDocumentCommand{\cost}{m}{%
+    \fp_compare:nTF {#1 = 0}{%if 0 replace with free
+        \dotfill ~ free%
+    }{\fp_compare:nTF {#1 <= 1}{% s or no s
+        \dotfill ~ #1~point%
+        }{\dotfill ~ #1~points%
+        }
+    }
+}
+
+
+
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%EXAMPLE USE CASE%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \name{Whirlwind Multiple Missile Launcher}
+% \descr{This enormous missile system mounted onto the whirlwind is capable of delivering a devastating blow to enemy lines. Each of the large missiles housed inside the missile racks is home to a assortment of a variety of warheads. When fired these missiles will arc high into the air above their target and upon decent, fracture releasing their deadly payload to cover a very large radius. Armed with a mixture of warhead types, the Whirlwind is a capable threat to a wide range of targets.}
+
+% \note{The whirlwind multiple missile launcher may only fire one type of missile for the duration of the battle which must be chosen during deployment.}
+
+% \weapon{Vengeance}{48"}{5}{4}{Heavy 1, Barrage, Large Blast}
+% \weapon{Castellan}{48}{6}{-}{Heavy 1, Barrage, Large Blast, Mines!}
+
+% \wrule{Mines!}{If in the final position of the Castellan blast zone there are no models, instead place a marker the size of a large blast template to represent the mine field. For every enemy model to move through or into the marker roll a d6 -- on a 4+ the model triggers a mine and takes a Strength 6 AP - hit. The mine field is removed at the end of the phase after it was triggered a second time -- all the mine have been used up.}
+
+
+% \makeweapon
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\endinput
