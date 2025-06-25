@@ -1,0 +1,135 @@
+% !TEX root = ../main.tex
+
+\chapter{Morale}
+
+\section{Overview}
+
+All troops with a Ld Characteristic may be asked to take a
+Morale Check. This section details how and when to do so.
+
+\section{Morale Check}
+Roll 2D6 and compare the result to the highest Ld of any
+model in the Unit. If the dice result is less than or equal to this
+score, the Unit has passed. Otherwise, the test is failed and
+the Unit must immediately Fall Back.
+
+\subsection{Morale Check Modifiers}
+
+Depending on casualties taken, a Unit may suffer negative
+modifiers to their Morale Test (detailed below). However, if the
+Unit rolls a score of 2 on the 2D6 they always pass the Morale
+Test regardless of any modifiers (Insane Heroism).
+
+\section{When to Take Morale Checks}
+Units have to take a Morale Test under any of the following
+conditions. However if a model or Unit has a special rule that
+causes them to automatically pass either Ld Tests or Morale
+Tests they do not have to test Morale at these times.
+
+
+\subsection{Shooting Casualties}
+A Unit have to take a Morale Test at the end of the Shooting
+Phase if at least 25% of said Unit’s current model count are
+eliminated in a single Shooting Phase.
+If the Unit is below 50% of its Starting Strength the Ld Test
+must be made with a -1 penalty to Ld. If the Unit is already
+Falling Back, or is Pinned, or is locked in Close Combat then
+this Unit does not have to take this Test.
+
+\subsection{Loosing an Assault}
+A Unit have to take a Morale Test if said Unit is defeated in
+Close Combat during the Assault Phase.
+If the Unit is below 50% of Starting Strength the Ld Test must
+be made with a -1 penalty to Ld. If the Unit is outnumbered,
+only apply the highest modifier from this table:
+
+\begin{tblr}{
+	% colsep = 6pt,
+	width = \linewidth,
+	colspec = {X[8,l] X[2,c]},
+	rows = {m},
+	rowsep = 3pt
+	% columns = {10em,c},
+	% column{1} = {1.75em,c}
+}
+{\bfseries Condition} & {\bfseries Modifier} \\\hline
+Outnumbered & -1\\
+Outnumbered 2:1 & -2\\
+Outnumbered 3:1 & -3\\
+Outnumbered 4:1 or more & -4\\
+\end{tblr}
+
+When considering whether the Unit is outnumbered:
+\begin{itemize}
+\item Vehicles with WS count as 10 models if they have FA of 12+
+\item Vehicles with WS count as 5 models if they have FA of 11-
+\item Monstrous Creatures count as 10 models.
+\item Other models count as as many models as their Wounds.
+\item Count all remaining models in the Unit after casualties are
+removed, not only the Engaged models.
+\end{itemize}
+
+\subsection{Tank Shock}
+You have to take a Morale Test if a Tank reaches a Unit's
+position while attempting a Tank Shock during its Movement
+Phase. ( See page \pageref{sec:movementphase}).
+If the Unit is below 50\% of Starting Strength the Ld Test must
+be made with a -1 penalty to Ld.
+
+\subsection{Last Man Standing}
+A Unit of multiple models that is reduced to a single model
+must pass a Ld Test at the beginning of each of its Turns or
+begin to Fall Back immediately.
+
+\section{Failing a Morale Check}
+Reminder that if any of these Morale Test is failed the Unit
+must immediately Fall Back.
+
+\subsection{Falling Back}
+A Fall Back move is a fighting withdrawal. Units make a Fall
+Back move upon failing a Morale Test and in each subsequent
+Movement Phase until the Unit either regroups or leaves the
+table edge.
+
+A normal Fall Back move is 2d6”. The Unit always Falls Back
+towards the closest point of their player’s table edge, or the
+base line where the unit deployed from if it came on the table
+from a different place. May be modified by Mission rules.
+
+The Unit must maintain Unit Coherency when making a Fall
+Back move. If making a Fall Back move through Difficult
+Terrain the distance rolled is halved (rounding up).
+Units that are making a Fall Back move may Shoot, but count
+as having moved for Ranged Weapon rules.
+
+Units that are Assaulted while making a Fall Back move must
+check to regroup immediately (see below). No modifiers are
+ever applied to this process, and Units that would normally not
+be allowed to regroup are allowed to make the check. If
+successful the Unit regroups and fights in close combat
+normally. If failed, the unit is scattered and all models are
+removed.
+
+If a Unit finds its Fall Back move blocked by impassible terrain
+and/or models (ignoring enemy models that have fought in
+close combat against the Unit in the current turn) the Unit may
+move around any obstruction in such a way as to get back to
+their base by the shortest route. If the Unit cannot perform a
+Fall Back move in any direction without doubling back the unit
+is destroyed and all models are removed.
+
+\section{Regrouping}
+
+At the start of their Movement Phase, a unit that is Falling Back
+may make an Ld Test to regroup (at +1 if no enemy units are
+in the Unit's LOS). If passed the Unit regroups and stops
+Falling Back. The Unit may Consolidate (page 13) but may not
+move further this Movement Phase, and counts as moving for
+the purposes of Ranged Weapon rules.
+
+The Unit may make a Regrouping Test if and only if it has at
+least 50\% Starting Strength remaining, there are no enemy
+
+Units within 6”, and the Unit is in coherency.
+If a Unit fails to regroup before reaching a table edge, it is
+removed from play.
